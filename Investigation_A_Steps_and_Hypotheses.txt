@@ -1,0 +1,112 @@
+Investigation A — Foundations-only Plan (Egyptian Fruit Bats vs Rats)
+
+Scope: Restricted to studied topics only
+- Levels of Measurement (mean, median, etc.)
+- Standard Normal Distribution
+- Z-score & Empirical Rule (68–95–99.7 rule)
+- Confidence Intervals
+- Statistical Hypotheses
+- The p-value
+- t-Distributions
+- Join Operations
+
+Goal
+Check if bats behave more cautiously (avoidance/vigilance) when rats are present on the food platform.
+
+Hypotheses (two-sided) [Topic: Statistical Hypotheses]
+- H0: Rat presence does not change bat behaviour (no difference in means/proportions).
+- H1: Rat presence changes bat behaviour (differences exist in means/proportions).
+
+Data and variables
+- dataset1.csv (event-level)
+  - start_time: timestamp of bat event (day-first dates, e.g., 30/12/2017 19:51).
+  - bat_landing_to_food: seconds from landing to food (latency; hesitation).
+  - habit: short text label (e.g., rat, fast, pick, gaze, bat…).
+  - rat_period_start, rat_period_end: interval of rat presence.
+  - reward (0/1): whether food was obtained.
+  - hours_after_sunset: timing variable.
+- dataset2.csv (time-slice aggregates)
+  - time, hours_after_sunset, bat_landing_number, food_availability,
+    rat_minutes (minutes of rat presence in slice), rat_arrival_number.
+
+Measurement levels [Topic: Levels of Measurement]
+- Latency (bat_landing_to_food): ratio-scale quantitative.
+- Reward: binary nominal; analyze as a proportion.
+- Vigilance event (derived): binary nominal; analyze as a proportion.
+- Rat presence: binary nominal (derived flag).
+- Counts in dataset2 (bat_landing_number): discrete quantitative.
+
+Operational definitions (derived fields)
+- rat_present = 1 if (habit contains "rat") OR start_time ∈ [rat_period_start, rat_period_end]; else 0. [Levels of Measurement]
+- vigilance_event = 1 if (habit in {gaze, fast} AND reward==0); else 0. [Levels of Measurement]
+
+Analysis steps (each step tags the topic used)
+1) Load and tidy data [Levels of Measurement]
+   - Read dataset1.csv with dayfirst=True; lowercase/strip habit; drop obvious metadata rows (e.g., containing ";").
+   - Create rat_present and vigilance_event as above; ensure latency is numeric.
+
+2) Optional join with aggregates [Join Operations]
+   - From dataset2.csv, define rat_present_agg = 1 if (rat_minutes>0 OR rat_arrival_number>0) else 0.
+   - Left join dataset2 onto dataset1 by a simple time key (e.g., same hour or nearest slice within ±15 min). Keep event-level rows.
+   - Purpose: sanity check that event-level rat_present aligns with time-slice rat activity.
+
+3) Outlier screen for latency using Z-scores [Z-score & Empirical Rule]
+   - Compute Z = (latency − mean_latency)/SD_latency within the no-rat group to set a reference.
+   - Flag |Z| > 3 as potential outliers (approx 0.3% expected by Empirical Rule). Perform analyses with and without these rows to check robustness.
+
+4) Descriptive summaries by rat presence [Levels of Measurement]
+   - Latency: n, mean, SD, median (IQR) for rat_present=0 vs 1.
+   - Proportions: reward rate and vigilance rate (mean of 0/1) for rat_present=0 vs 1.
+
+5) Confidence intervals (95%) [Confidence Intervals]
+   - Mean latency (by group): use t-based CI: mean ± t*·SE (df by group). [t-Distributions]
+   - Difference in mean latency (rats − no rats): Welch-style CI using t-distribution. [t-Distributions]
+   - Proportions (reward, vigilance): normal-approx CI for each group and for the difference in proportions. [Standard Normal Distribution]
+
+6) Hypothesis tests and p-values [Statistical Hypotheses, The p-value]
+   - Mean latency: two-sample t-test (Welch, two-sided). Report t, df, p-value, and 95% CI for the mean difference. [t-Distributions]
+   - Reward rate: two-proportion Z-test (two-sided). Report Z, p-value, and 95% CI for difference in proportions. [Standard Normal Distribution]
+   - Vigilance rate: two-proportion Z-test (two-sided). Report Z, p-value, and 95% CI. [Standard Normal Distribution]
+
+7) Simple visualizations (optional aids)
+   - Histogram or density of latency by rat_present; indicate mean±SD bands. [Z-score & Empirical Rule]
+   - Bar charts with 95% CI error bars for reward and vigilance rates by rat_present. [Confidence Intervals]
+
+8) Interpretation using CIs first, then p-values [Confidence Intervals, The p-value]
+   - If the 95% CI for mean latency difference excludes 0 (and p<0.05), conclude evidence of changed latency with rats; state direction and approximate size.
+   - If the 95% CI for difference in reward/vigilance proportions excludes 0 (and p<0.05), conclude evidence of changed rates; state direction and size.
+
+How dataset2 complements dataset1 (kept within scope)
+- Use the optional join to verify that periods with rat_present_agg=1 coincide with higher event-level vigilance rate or latency. [Join Operations, Levels of Measurement]
+- Summarize bat_landing_number means with 95% t-based CIs by rat_present_agg to see volume changes. [t-Distributions, Confidence Intervals]
+
+Decision rule (plain language) [Statistical Hypotheses]
+- Support for H1 if rats are associated with:
+  - Higher mean latency (CI excludes 0; p<0.05), and/or
+  - Higher vigilance proportion or lower reward proportion (CI excludes 0; p<0.05).
+
+What we will NOT do (staying within studied topics)
+- No nonparametric tests (e.g., Mann–Whitney), no chi-square/Fisher, no correlation/regression models, no mixed effects, no advanced feature engineering.
+
+Deliverables
+- Updated visualisation.py can: compute Z-scores for latency, produce descriptive stats, build 95% CIs (t for means; normal for proportions), run Welch t-test and two-proportion Z-tests, and save simple plots with CI bars.
+- A short report paragraph summarizing direction, magnitude (from CIs), and significance (p-values) for latency, reward, and vigilance.
+
+Small cautions
+- Check normal-approx conditions for proportions (np and n(1−p) ≥ 10 per group). If not met, report CIs descriptively and note low counts.
+- For latency, t-tests are robust to mild non-normality when n is moderate; still report medians/IQRs alongside means.
+- Document any rows excluded by the Z-score outlier screen and show that conclusions are unchanged.
+
+
+
+
+What have been studied (preferably do not get out of this scope):
+
+-Standard Normal Distribution
+-Z-score & empirical rule
+-Confidence Intervals
+-Statistical Hypotheses
+-The p-value
+- t-Distributions
+-Levels of Measurement (mean, median, etc...)
+-Join Operations
