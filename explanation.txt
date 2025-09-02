@@ -1,0 +1,83 @@
+DATASET1.CSV - DATA PARAMETERS AND THEIR DATA TYPES
+==================================================
+A team of zoologists studied the foraging behaviour of the Egyptian Fruit Bats (Rousettus aegyptiacus) in
+the presence of Black Rats (Rattus rattus). They set out to conduct a series of observations in a semi-
+natural, open bat colony over a 7-month period, where the interactions of both animals’ on a provisioned
+food platform were monitored using surveillance video cameras. The outcome of these observations was
+then collated into two datasets.
+
+Lets first tackle the first dataset.
+
+QUICK REFERENCE LIST:
+====================
+start_time: "DateTime"
+bat_landing_to_food: "Numeric"
+habit: "Categorical"
+rat_period_start: "DateTime"
+rat_period_end: "DateTime"
+seconds_after_rat_arrival: "Numeric"
+risk: "Binary"
+reward: "Binary"
+month: "Numeric"
+sunset_time: "DateTime"
+hours_after_sunset: "Numeric"
+season: "Numeric"
+
+he first dataset focuses on what happens each time a bat lands on a provisioned food platform when
+rats are present. Each row in this dataset is a unique, single bat landing on the food platform. It further
+describes the situational context and a bat’s observed behaviours following its landing.
+The zoologists manually detected each bat landings from the collected surveillance video footage, as
+previously described. Behavioural variables such as vigilance and foraging success of each landing were
+then manually annotated and quantified by watching the video recordings. Table 1 explains the meaning
+of variables in this dataset
+
+
+Column
+No.
+Variable Name Description
+1 start_time Bat’s landing time on the food platform
+2 bat_landing_to_food Time difference (in seconds) after a bat’s landing and before it started
+to approach the food on the platform
+3 habit The context surrounding the landing event and the animals’ behaviour
+4 rat_period_start The time rat(s) arrived on the food platform
+5 rat_period_end The time rat(s) left the food platform
+6 seconds_after_rat_arrival Time difference (in seconds) since rats’ arrival until the bat landed
+7 risk Indicates a risk-taking behaviour, such as attacking rats to gain access
+to food or not, as determined by the zoologist
+(0: risk-avoidance; 1: risk-taking)
+8 reward Whether the demonstrated behaviour is rewarding
+(0: no reward; 1: reward)
+9 month Month label assigned by the zoologists
+10 sunset_time Sunset time of the day
+11 hours_after_sunset Time difference (in hours) since sunset until the observed landing
+12 season Season label assigned by the zoologists
+
+NOTES:
+- Some cells contain empty values (especially in the 'habit' column)
+- The 'bat_landing_to_food' column contains both very small decimal values and larger integer values
+- DateTime columns are stored as strings and would need parsing for temporal analysis
+- Binary columns (risk, reward) use 0/1 encoding
+- Some unusual entries exist (like coordinates in one 'habit' cell: "94.0,305.0,239.0,416.0; 364.8,139.3,462.3,241.3")
+
+IMPORTANT CORRELATIONS:
+======================
+
+1. bat_landing_to_food vs seconds_after_rat_arrival
+   - Reveals how bat response time changes based on when they arrive relative to rats
+   - Key insight: Understanding competitive timing strategies
+
+2. hours_after_sunset vs bat_landing_to_food  
+   - Shows temporal patterns in bat foraging behavior throughout the night
+   - Key insight: Identifying peak activity periods and behavioral changes over time
+
+3. risk vs bat_landing_to_food
+   - Demonstrates how risk-taking behavior affects bat landing and approach patterns
+   - Key insight: Risk assessment strategies and trade-offs in foraging decisions
+
+4. reward vs bat_landing_to_food
+   - Reveals the relationship between rewarding outcomes and bat response behavior
+   - Key insight: Learning and adaptation patterns in foraging success
+
+5. seconds_after_rat_arrival vs risk
+   - Shows how timing relative to rat presence influences risk-taking decisions
+   - Key insight: Temporal dynamics of competitive interactions and decision-making
