@@ -81,3 +81,11 @@ IMPORTANT CORRELATIONS:
 5. seconds_after_rat_arrival vs risk
    - Shows how timing relative to rat presence influences risk-taking decisions
    - Key insight: Temporal dynamics of competitive interactions and decision-making
+
+
+
+WHAT I DO NOT KNOW:
+
+- if we need to do more graphs like "Distributions of Data" Histogram
+- If we need to use Z score
+- If we need to use p-value

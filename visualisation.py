@@ -225,6 +225,80 @@ def plot_correlation_chart(csv_path, param1, param2, check_outlier=False):
     
     print(f"Visualization type: {get_chart_type(param1_type, param2_type)}")
 
+def plot_binary_vs_categorical(csv_path, binary_col, categorical_col):
+    """
+    Creates a simple bar chart showing counts of each category split by binary values.
+    For example: habit categories (fast, rat, pick) split by risk (0=no risk, 1=risk).
+    
+    Args:
+        csv_path (str): Path to the CSV file
+        binary_col (str): Name of the binary column (should contain 0s and 1s)
+        categorical_col (str): Name of the categorical column
+    """
+    # Load dataset
+    df = pd.read_csv(csv_path)
+    
+    # Drop rows with missing values in the selected columns
+    data = df[[binary_col, categorical_col]].dropna()
+    
+    # Get unique categories
+    categories = data[categorical_col].unique()
+    
+    # Count occurrences for each combination
+    counts_0 = []  # binary = 0 (no risk/no reward)
+    counts_1 = []  # binary = 1 (risk/reward)
+    
+    for category in categories:
+        # Count for binary = 0
+        count_0 = len(data[(data[categorical_col] == category) & (data[binary_col] == 0)])
+        counts_0.append(count_0)
+        
+        # Count for binary = 1
+        count_1 = len(data[(data[categorical_col] == category) & (data[binary_col] == 1)])
+        counts_1.append(count_1)
+    
+    # Create bar chart
+    x = range(len(categories))
+    width = 0.35
+    
+    plt.figure(figsize=(10, 6))
+    
+    # Create bars
+    bars1 = plt.bar([i - width/2 for i in x], counts_0, width, 
+                    label=f'No {binary_col.title()} (0)', color='lightcoral', alpha=0.8)
+    bars2 = plt.bar([i + width/2 for i in x], counts_1, width, 
+                    label=f'{binary_col.title()} (1)', color='lightblue', alpha=0.8)
+    
+    # Add value labels on top of bars
+    for bar in bars1:
+        height = bar.get_height()
+        plt.text(bar.get_x() + bar.get_width()/2., height + height*0.01,
+                f'{int(height)}', ha='center', va='bottom')
+    
+    for bar in bars2:
+        height = bar.get_height()
+        plt.text(bar.get_x() + bar.get_width()/2., height + height*0.01,
+                f'{int(height)}', ha='center', va='bottom')
+    
+    # Customize chart
+    plt.title(f'{categorical_col.title()} Distribution by {binary_col.title()}')
+    plt.xlabel(f'{categorical_col.title()} Categories')
+    plt.ylabel('Count')
+    plt.xticks(x, categories, rotation=45)
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+    
+    # Print detailed summary
+    print(f"\nBinary vs Categorical Analysis:")
+    print(f"Binary column: {binary_col}")
+    print(f"Categorical column: {categorical_col}")
+    print(f"Total data points: {len(data)}")
+    print("\nDetailed breakdown:")
+    
+    for i, category in enumerate(categories):
+        print(f"{category}: No {binary_col} = {counts_0[i]}, {binary_col.title()} = {counts_1[i]}")
+
 def get_chart_type(type1, type2):
     """Helper function to determine chart type based on data types"""
     if (type1 == "Numeric" and type2 == "Binary") or (type1 == "Binary" and type2 == "Numeric"):
@@ -245,4 +319,9 @@ def get_chart_type(type1, type2):
         return "Unsupported"
 
 # Example usage:
-plot_correlation_chart('dataset1.csv', 'risk', 'bat_landing_to_food', check_outlier=False)
+# Original correlation chart
+# plot_correlation_chart('dataset1.csv', 'risk', 'habit', check_outlier=True)
+
+# New binary vs categorical analysis
+plot_binary_vs_categorical('dataset1.csv', 'risk', 'habit')
+plot_binary_vs_categorical('dataset1.csv', 'reward', 'habit')

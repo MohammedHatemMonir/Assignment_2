@@ -1,0 +1,11 @@
+First step made is taking a look at the Data
+In data set 1 we found that:
+-No missing values except in habit (41 missing).
+-Datetime columns (start_time, rat_period_start, rat_period_end, sunset_time) are still object (strings). We need to parse them.
+-907 total rows
+
+
+
+coding steps:
+
+1- sorted dataset1

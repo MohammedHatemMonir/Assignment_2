@@ -1,0 +1,15 @@
+seconds_after_rat_arrival is the difference between rat_start_time and start_time, we observed that rats are usually on the platform first.
+Risk-reward analysis, see wether taking the risk was rewarding to the bats or not
+
+The recording is recording 24/7, we can know the time of recording by checking the time stamps, the 2 datasets are not separate at all.
+
+from the second dataset we can see how many rats were present
+
+we can check if the rats won the food or not based on if the reward is 0 and the food was reduced, it means the rats ate it.
+
+We concluded from the records in dataset1, and the batlandings in dataset 2 that dataset one is only a sample not a population
+
+every record in table one will have a record in table 2, not every record in table 2 will have a record in table 1
+
+******************************************************ACTIONS**************************************************
+-(order the first dataset based on time)    
