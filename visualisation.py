@@ -106,36 +106,37 @@ def plot_correlation_chart(csv_path, param1, param2, check_outlier=False):
     
     # Case 3: Both Binary
     elif param1_type == "Binary" and param2_type == "Binary":
-        if check_outlier:
-            # IQR outlier detection for numeric data
-            Q1_param1 = data[param1].quantile(0.25)
-            Q3_param1 = data[param1].quantile(0.75)
-            IQR_param1 = Q3_param1 - Q1_param1
-            
-            Q1_param2 = data[param2].quantile(0.25)
-            Q3_param2 = data[param2].quantile(0.75)
-            IQR_param2 = Q3_param2 - Q1_param2
-            
-            lower_bound_param1 = Q1_param1 - 1.5 * IQR_param1
-            upper_bound_param1 = Q3_param1 + 1.5 * IQR_param1
-            lower_bound_param2 = Q1_param2 - 1.5 * IQR_param2
-            upper_bound_param2 = Q3_param2 + 1.5 * IQR_param2
-            
-            outliers_param1 = (data[param1] < lower_bound_param1) | (data[param1] > upper_bound_param1)
-            outliers_param2 = (data[param2] < lower_bound_param2) | (data[param2] > upper_bound_param2)
-            outliers = outliers_param1 | outliers_param2
-            
-            data['Outlier'] = outliers
-            palette = {False: 'blue', True: 'red'}
-            sns.scatterplot(data=data, x=param1, y=param2, hue='Outlier', palette=palette)
-            plt.title(f'Correlation between {param1} and {param2} (IQR Outliers Highlighted)')
-        else:
-            sns.scatterplot(data=data, x=param1, y=param2)
-            plt.title(f'Correlation between {param1} and {param2}')
+        # Create cross-tabulation for binary vs binary
+        crosstab = pd.crosstab(data[param1], data[param2], margins=True)
         
-        # Add correlation coefficient for binary pairs
+        # Create a more readable version with labels
+        binary_crosstab = pd.crosstab(
+            data[param1].map({0: f'{param1}=No(0)', 1: f'{param1}=Yes(1)'}),
+            data[param2].map({0: f'{param2}=No(0)', 1: f'{param2}=Yes(1)'}),
+            margins=True
+        )
+        
+        # Create heatmap
+        plt.figure(figsize=(8, 6))
+        sns.heatmap(binary_crosstab.iloc[:-1, :-1], annot=True, fmt='d', cmap='Blues', 
+                    cbar_kws={'label': 'Count'})
+        plt.title(f'Cross-tabulation: {param1} vs {param2}')
+        plt.ylabel(param1)
+        plt.xlabel(param2)
+        
+        # Print detailed breakdown
+        print(f"\nBinary vs Binary Analysis:")
+        print(f"Cross-tabulation table:")
+        print(binary_crosstab)
+        print(f"\nInterpretation:")
+        print(f"- {param1}=0 & {param2}=0: {crosstab.iloc[0,0]} cases")
+        print(f"- {param1}=0 & {param2}=1: {crosstab.iloc[0,1]} cases") 
+        print(f"- {param1}=1 & {param2}=0: {crosstab.iloc[1,0]} cases")
+        print(f"- {param1}=1 & {param2}=1: {crosstab.iloc[1,1]} cases")
+        
+        # Calculate correlation for binary pairs
         correlation = data[param1].corr(data[param2])
-        plt.text(0.05, 0.95, f'Correlation: {correlation:.3f}', transform=plt.gca().transAxes, 
+        plt.text(0.02, 0.98, f'Correlation: {correlation:.3f}', transform=plt.gca().transAxes, 
                 bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.8))
     
     # Case 4: One Numeric, One Categorical
@@ -306,7 +307,7 @@ def get_chart_type(type1, type2):
     elif type1 == "Numeric" and type2 == "Numeric":
         return "Scatter Plot"
     elif type1 == "Binary" and type2 == "Binary":
-        return "Scatter Plot (Binary)"
+        return "Heatmap (Binary Cross-tabulation)"
     elif (type1 == "Numeric" and type2 == "Categorical") or (type1 == "Categorical" and type2 == "Numeric"):
         return "Box Plot"
     elif type1 == "Categorical" and type2 == "Categorical":
@@ -320,8 +321,8 @@ def get_chart_type(type1, type2):
 
 # Example usage:
 # Original correlation chart
-# plot_correlation_chart('dataset1.csv', 'risk', 'habit', check_outlier=True)
+plot_correlation_chart('dataset1.csv', 'risk', 'reward', check_outlier=True)
 
 # New binary vs categorical analysis
-plot_binary_vs_categorical('dataset1.csv', 'risk', 'habit')
-plot_binary_vs_categorical('dataset1.csv', 'reward', 'habit')
+# plot_binary_vs_categorical('dataset1.csv', 'risk', 'habit')
+# plot_binary_vs_categorical('dataset1.csv', 'reward', 'habit')

@@ -11,5 +11,12 @@ We concluded from the records in dataset1, and the batlandings in dataset 2 that
 
 every record in table one will have a record in table 2, not every record in table 2 will have a record in table 1
 
+
+# when connecting between 2 datasets(dataset1_sorted, dataset2), we'll check the start_time in table 1 and join it with  record it is in in table 2 (time)
+# add record "rat_period_end" we'll check where it is in time in table 2, if it's the same record, we'll not do anything, if it is in a different record in table 2, we will also join it
+# every column we take from table 2 we'll add it as a column in table 1 for each of these columns: bat_landing_number,food_availability,rat_minutes,rat_arrival_number as a new column in table 1. and a duplicate record for them in case we take 2 record:  bat_landing_number2,food_availability2,rat_minutes2,rat_arrival_number2
+# example table 1 after joining the 2 datasets: start_time,bat_landing_to_food,habit,rat_period_start,rat_period_end,seconds_after_rat_arrival,risk,reward,month,sunset_time,hours_after_sunset,season,bat_landing_number,food_availability,rat_minutes,rat_arrival_number,bat_landing_number2,food_availability2,rat_minutes2,rat_arrival_number2
+
 ******************************************************ACTIONS**************************************************
 -(order the first dataset based on time)    
+-(we will take the records from dataset2 and connect them to the records in dataset1 based on the start time and the time of recording, if the durating (start time and bat landing) comes between 2 recordings, we will take the two records )
