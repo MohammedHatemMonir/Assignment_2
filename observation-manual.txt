@@ -7,7 +7,7 @@ from the second dataset we can see how many rats were present
 
 we can check if the rats won the food or not based on if the reward is 0 and the food was reduced, it means the rats ate it.
 
-We concluded from the records in dataset1, and the batlandings in dataset 2 that dataset one is only a sample not a population
+We concluded from the records in dataset1, and the batlandings in dataset 2 that dataset one is only a sample not a population because of the amount of bat landings in every record
 
 every record in table one will have a record in table 2, not every record in table 2 will have a record in table 1
 
@@ -17,6 +17,17 @@ every record in table one will have a record in table 2, not every record in tab
 # every column we take from table 2 we'll add it as a column in table 1 for each of these columns: bat_landing_number,food_availability,rat_minutes,rat_arrival_number as a new column in table 1. and a duplicate record for them in case we take 2 record:  bat_landing_number2,food_availability2,rat_minutes2,rat_arrival_number2
 # example table 1 after joining the 2 datasets: start_time,bat_landing_to_food,habit,rat_period_start,rat_period_end,seconds_after_rat_arrival,risk,reward,month,sunset_time,hours_after_sunset,season,bat_landing_number,food_availability,rat_minutes,rat_arrival_number,bat_landing_number2,food_availability2,rat_minutes2,rat_arrival_number2
 
+we concluded that the merging is correct by checking rat_period_start and rat_period_end then comparing it to rat time 1 + rat time 2
+
+every bat landing happened, there was at least 1 rat present in the 30 min recording
+
+There is no instance where rat_period_start was more than (>) start_time
+
+we clea
+
 ******************************************************ACTIONS**************************************************
 -(order the first dataset based on time)    
+- (Unify the time stamps)
 -(we will take the records from dataset2 and connect them to the records in dataset1 based on the start time and the time of recording, if the durating (start time and bat landing) comes between 2 recordings, we will take the two records )
+-clean habits column, if it is all numbers, make it empty
+- average food_availability and food_availability2.
