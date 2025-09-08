@@ -3,7 +3,8 @@ In data set 1 we found that:
 -No missing values except in habit (41 missing).
 -Datetime columns (start_time, rat_period_start, rat_period_end, sunset_time) are still object (strings). We need to parse them.
 -907 total rows
-
+- visualize habits and check how many habits have risk and how many do not
+-over the time, where habit is "rat" compare the bat_landing_to_food
 
 
 coding steps:

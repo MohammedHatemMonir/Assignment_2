@@ -4,10 +4,27 @@
     # merged_df = join_datasets()
     
     # Unify datetime formats
+    # uniif __name__ == "__main__":
+    # Run the merge
+    # merged_df = join_datasets()
+    
+    # Unify datetime formats
     # unify_datetime_format()
     
     # Clean habit column
-    clean_habit_column()
+    # clean_habit_column()
+    
+    # Create aggregated columns
+    # create_aggregated_columns()
+    
+    # Reorder columns
+    # reorder_columns()
+    
+    # Preview results
+    # preview_merge_results()mat()
+    
+    # Clean habit column
+#
     
     # Preview results
     # preview_merge_results()here it is in time in table 2, if it's the same record, we'll not do anything, if it is in a different record in table 2, we will also join it
@@ -179,6 +196,123 @@ def clean_habit_column():
         print("Merged dataset not found. Run join_datasets() first.")
         return None
 
+def create_aggregated_columns():
+    """
+    Create new avg/sum columns and remove table_2_time columns
+    """
+    try:
+        df = pd.read_csv('dataset1_merged.csv')
+        print("Dataset loaded successfully")
+        
+        # Create average food_availability
+        df['avg_food_availability'] = df[['food_availability', 'food_availability2']].mean(axis=1, skipna=True)
+        
+        # Create average bat_landing_number
+        df['avg_bat_landing_number'] = df[['bat_landing_number', 'bat_landing_number2']].mean(axis=1, skipna=True)
+        
+        # Create average rat_arrival_number
+        df['avg_rat_arrival_number'] = df[['rat_arrival_number', 'rat_arrival_number2']].mean(axis=1, skipna=True)
+        
+        # Create sum of rat_minutes
+        df['sum_rat_minutes'] = df[['rat_minutes', 'rat_minutes2']].sum(axis=1, skipna=True)
+        
+        # Remove table_2_time columns
+        columns_to_remove = ['table_2_time', 'table_2_time_2']
+        df = df.drop(columns=columns_to_remove, errors='ignore')
+        
+        # Save the updated dataset
+        df.to_csv('dataset1_merged.csv', index=False)
+        print("Aggregated columns created and table_2_time columns removed")
+        print(f"Updated dataset saved as 'dataset1_merged.csv'")
+        
+        # Show info about new columns
+        print("\nNew aggregated columns created:")
+        print("- avg_food_availability")
+        print("- avg_bat_landing_number") 
+        print("- avg_rat_arrival_number")
+        print("- sum_rat_minutes")
+        print("\nRemoved columns:")
+        print("- table_2_time")
+        print("- table_2_time_2")
+        
+        print(f"\nFinal dataset shape: {df.shape}")
+        
+        return df
+        
+    except FileNotFoundError:
+        print("Merged dataset not found. Run join_datasets() first.")
+        return None
+
+def reorder_columns():
+    """
+    Reorder columns based on logical groupings, keeping month and season at the end
+    """
+    try:
+        df = pd.read_csv('dataset1_merged.csv')
+        print("Dataset loaded successfully")
+        
+        # Define column order based on logical groupings
+        column_order = [
+            # Time-related columns (main event timing)
+            'start_time',
+            'rat_period_start', 
+            'rat_period_end',
+            'sum_rat_minutes',
+            'avg_rat_arrival_number',
+            'avg_bat_landing_number',
+            'avg_food_availability',
+            'risk',
+            'reward',
+
+            # Bat behavior columns
+            'habit',
+            
+            
+            # Rat-related columns
+            'seconds_after_rat_arrival',
+            # Original dataset2 columns (for reference)
+            'bat_landing_to_food',
+            'bat_landing_number',
+            'food_availability', 
+            'rat_arrival_number',
+            'bat_landing_number2',
+            'food_availability2',
+            'rat_minutes',
+            'rat_minutes2', 
+            'rat_arrival_number2',
+            
+            # Temporal context (at the end)
+            'month',
+            'season',
+            'sunset_time',
+            'hours_after_sunset',
+        ]
+        
+        # Only include columns that actually exist in the dataframe
+        available_columns = [col for col in column_order if col in df.columns]
+        
+        # Add any remaining columns that weren't in our predefined order
+        remaining_columns = [col for col in df.columns if col not in available_columns]
+        final_column_order = available_columns + remaining_columns
+        
+        # Reorder the dataframe
+        df = df[final_column_order]
+        
+        # Save the reordered dataset
+        df.to_csv('dataset1_merged.csv', index=False)
+        print("Columns reordered successfully")
+        print(f"Updated dataset saved as 'dataset1_merged.csv'")
+        
+        print("\nFinal column order:")
+        for i, col in enumerate(df.columns, 1):
+            print(f"{i:2d}. {col}")
+        
+        return df
+        
+    except FileNotFoundError:
+        print("Merged dataset not found. Run previous steps first.")
+        return None
+
 def preview_merge_results():
     """
     Preview the first few rows of the merged dataset
@@ -196,6 +330,23 @@ def preview_merge_results():
         
     except FileNotFoundError:
         print("Merged dataset not found. Run join_datasets() first.")
+def get_unique_habit_values(csv_path):
+    """
+    Returns a list of all unique values in the 'habit' column.
+    
+    Args:
+        csv_path (str): Path to the CSV file
+    
+    Returns:
+        list: List of unique habit values
+    """
+    # Load the dataset
+    df = pd.read_csv(csv_path)
+    
+    # Get unique values from the habit column, excluding NaN values
+    unique_habits = df['habit'].dropna().unique().tolist()
+    
+    return unique_habits
 
 if __name__ == "__main__":
     # Run the merge
@@ -205,7 +356,10 @@ if __name__ == "__main__":
     # unify_datetime_format()
     
     # Clean habit column
-    clean_habit_column()
+    # clean_habit_column()
     
+    # Create aggregated columns
+    # create_aggregated_columns()
+    reorder_columns()
     # Preview results
     # preview_merge_results()

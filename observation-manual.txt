@@ -19,15 +19,152 @@ every record in table one will have a record in table 2, not every record in tab
 
 we concluded that the merging is correct by checking rat_period_start and rat_period_end then comparing it to rat time 1 + rat time 2
 
-every bat landing happened, there was at least 1 rat present in the 30 min recording
+every bat landing happened, there was at least 1 rat present in the 30 min recording (in dataset1)
 
 There is no instance where rat_period_start was more than (>) start_time
 
-we clea
+avg_food_availability, avg_bat_landing_number, avg_rat_arrival_number, sum_rat_minutes are calculated in case the bat appeared in 2 recordings instead of 1
+
+We realised that when habit is "rat" the risk is always 1 and 'pick' is always 0, 100% of the time, so the habit discribes the type of the risk/situation 
+
+
+
+============================================================
+BAT LANDING TO FOOD TIME ANALYSIS FOR HABIT = 'RAT' OVER TIME (START_TIME)
+============================================================
+Total 'rat' habit entries analyzed: 221
+Date range: 26/12/2017 21:24 to 20/05/2018 21:52
+
+DESCRIPTIVE STATISTICS:
+Mean bat landing time: 8.67 seconds
+Median bat landing time: 5.00 seconds
+Mode bat landing time: 1.00 seconds
+Standard deviation: 9.57 seconds
+Minimum time: 0.01 seconds
+Maximum time: 38.00 seconds
+
+TREND ANALYSIS:
+Trend slope: 0.027389 seconds per observation
+Standard error of slope: 0.006527
+Correlation coefficient (r): 0.2400
+R-squared (coefficient of determination): 0.0576
+P-value: 0.000036
+Statistical significance: highly significant (p < 0.001)
+Confidence level: 99.9%
+Trend interpretation: Weak-to-moderate increasing trend over time
+Effect size (R²): 5.8% of variance explained by time
+Practical meaning: Bat landing time increases by 0.027 seconds per observation
+
+
+Avoidance: We can use the seconds_after_rat_arrival variable to measure avoidance. A longer delay between the rat's arrival and a bat's landing may indicate avoidance behavior.
+
+Vigilance: We can use the bat_landing_to_food variable to measure vigilance. A longer delay between the bat's landing and its approach to the food platform may indicate increased caution or a higher state of vigilance.
+
+
+seconds_after_rat_arrival vs avg_rat_arrival_number to see whether or not the rat take longer time to land if there are more rats
+
+
+===================================================================================================
+SECONDS AFTER RAT ARRIVAL VS AVG RAT ARRIVAL NUMBER CORRELATION ANALYSIS (ALL DATA - NO FILTERING)
+===================================================================================================
+Total entries analyzed: 824
+Analyzing: seconds_after_rat_arrival vs avg_rat_arrival_number
+
+DESCRIPTIVE STATISTICS - SECONDS_AFTER_RAT_ARRIVAL:
+Mean seconds_after_rat_arrival: 280.82
+Median seconds_after_rat_arrival: 206.00
+Mode seconds_after_rat_arrival: 22.00
+Standard deviation: 241.55
+Minimum: 0.00
+Maximum: 949.00
+
+DESCRIPTIVE STATISTICS - AVG_RAT_ARRIVAL_NUMBER:
+Mean avg_rat_arrival_number: 1.50
+Median avg_rat_arrival_number: 1.00
+Mode avg_rat_arrival_number: 1.00
+Standard deviation: 0.69
+Minimum: 1.00
+Maximum: 3.00
+
+CORRELATION ANALYSIS:
+Correlation coefficient (r): -0.0580
+R-squared (coefficient of determination): 0.0034
+Regression slope: -0.000167
+P-value: 0.096273
+Statistical significance: marginally significant (p < 0.1)
+Confidence level: 90.4%
+Correlation interpretation: Very weak negative correlation
+Effect size (R²): 0.3% of variance explained
+
+
+
+rat_minutes vs bat_landing_to_food
+
+If bats perceived rats strongly as predators, you’d expect more hesitation (longer bat_landing_to_food) as rat activity increased.
+
+DESCRIPTIVE STATISTICS:
+Mean bat landing time: 5.63 seconds
+Median bat landing time: 3.00 seconds
+Mode bat landing time: 1.00 seconds
+Standard deviation: 6.46 seconds
+Minimum time: 0.01 seconds
+Maximum time: 27.00 seconds
+
+TREND ANALYSIS (sum_rat_minutes vs bat_landing_to_food):
+Trend slope: -0.008984 seconds per rat-minute
+Standard error of slope: 0.032907
+Correlation coefficient (r): -0.0097
+R-squared (coefficient of determination): 0.0001
+P-value: 0.784922
+Statistical significance: not significant (p >= 0.05)
+Confidence level: <95%
+Trend interpretation: Weak decreasing relationship between rat activity duration and bat landing time
+Effect size (R²): 0.0% of variance in bat landing time explained by rat minutes
+Practical meaning: Bat landing time changes by -0.009 seconds for each additional rat-minute
+
+sum_rat_minutes vs seconds_after_rat_arrival
+
+
+DESCRIPTIVE STATISTICS for seconds_after_rat_arrival:
+Mean: 277.26 seconds
+Median: 203.00 seconds
+Mode: 22.00 seconds
+Standard deviation: 238.18 seconds
+Minimum: 0.00 seconds
+Maximum: 949.00 seconds
+
+TREND ANALYSIS (sum_rat_minutes vs seconds_after_rat_arrival):
+Trend slope: 12.702151  seconds per unit of sum_rat_minutes
+Standard error of slope: 1.066113
+Correlation coefficient (r): 0.3736
+R-squared (coefficient of determination): 0.1396
+P-value: 0.000000
+Statistical significance: highly significant (p < 0.001)
+Confidence level: 99.9%
+Trend interpretation: Moderate increasing relationship
+Effect size (R²): 14.0% of variance in seconds_after_rat_arrival explained by sum_rat_minutes
+Practical meaning: seconds_after_rat_arrival changes by 12.702 seconds per 1 unit increase in sum_rat_minutes
+
+avg_rat_arrival_number vs avg_bat_landing_number
+
+
+
+rat_minutes vs food_availability
+
+rat_minutes vs avg_rat_arrival_number
+
+rat_minutes vs seconds_after_rat_arrival
+
 
 ******************************************************ACTIONS**************************************************
--(order the first dataset based on time)    
-- (Unify the time stamps)
--(we will take the records from dataset2 and connect them to the records in dataset1 based on the start time and the time of recording, if the durating (start time and bat landing) comes between 2 recordings, we will take the two records )
--clean habits column, if it is all numbers, make it empty
-- average food_availability and food_availability2.
+- (order the first dataset based on start_time)    
+- (Unify the time stampscformat)
+- (we will take the records from dataset2 and connect them to the records in dataset1 based on the start time and the time of recording, if the durating (start time and rat_period_end) comes between 2 recordings, we will take the two records) start_time,bat_landing_to_food,habit,rat_period_start,rat_period_end,seconds_after_rat_arrival,risk,reward,month,sunset_time,hours_after_sunset,season,bat_landing_number,food_availability,rat_minutes,rat_arrival_number,bat_landing_number2,food_availability2,rat_minutes2,rat_arrival_number2
+- clean habits column, if it is all numbers, make it empty
+- average food_availability and food_availability2 => avg_food_availability
+- average of bat_landing_number and bat_landing_number2 => avg_bat_landing_number 
+- average rat rat_arrival_number and rat_arrival_number2 => avg_rat_arrival_number
+- sum of rat_minutes and rat_minutes2 => sum_rat_minutes
+- remove table 2 time and table 2 time 2 (it was only used to check the credebility of the merge)
+- over the time, where habit is "rat" compare the bat_landing_to_food
+- visualize data and calculate DESCRIPTIVE STATISTICS

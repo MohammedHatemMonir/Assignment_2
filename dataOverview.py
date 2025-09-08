@@ -44,3 +44,9 @@ df['habit'] = df['habit'].apply(lambda x: None if pd.notna(x) and re.search(r'\d
 
 print("\n===== UNIQUE VALUES IN HABIT (AFTER CLEANING) =====")
 print(df['habit'].unique())
+
+print("\n===== TABLE_2_TIME_2 IS NONE COUNT =====")
+print((df['table_2_time_2'].isna()).sum())
+
+print("\n===== TABLE_2_TIME_2 IS NOT NONE COUNT =====")
+print((df['table_2_time_2'].notna()).sum())
