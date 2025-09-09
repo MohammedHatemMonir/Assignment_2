@@ -1,11 +1,11 @@
-seconds_after_rat_arrival is the difference between rat_start_time and start_time, we observed that rats are usually on the platform first.
+The null hypothesis is that rat presence has no effect on bat avoidance or vigilance.
+
+seconds_after_rat_arrival is the difference between rat_start_time and start_time, from dataset1 we observed that rats are usually on the platform first.
 Risk-reward analysis, see wether taking the risk was rewarding to the bats or not
 
 The recording is recording 24/7, we can know the time of recording by checking the time stamps, the 2 datasets are not separate at all.
 
 from the second dataset we can see how many rats were present
-
-we can check if the rats won the food or not based on if the reward is 0 and the food was reduced, it means the rats ate it.
 
 We concluded from the records in dataset1, and the batlandings in dataset 2 that dataset one is only a sample not a population because of the amount of bat landings in every record
 
@@ -17,7 +17,7 @@ every record in table one will have a record in table 2, not every record in tab
 # every column we take from table 2 we'll add it as a column in table 1 for each of these columns: bat_landing_number,food_availability,rat_minutes,rat_arrival_number as a new column in table 1. and a duplicate record for them in case we take 2 record:  bat_landing_number2,food_availability2,rat_minutes2,rat_arrival_number2
 # example table 1 after joining the 2 datasets: start_time,bat_landing_to_food,habit,rat_period_start,rat_period_end,seconds_after_rat_arrival,risk,reward,month,sunset_time,hours_after_sunset,season,bat_landing_number,food_availability,rat_minutes,rat_arrival_number,bat_landing_number2,food_availability2,rat_minutes2,rat_arrival_number2
 
-we concluded that the merging is correct by checking rat_period_start and rat_period_end then comparing it to rat time 1 + rat time 2
+?????   we concluded that the merging is correct by checking rat_period_start and rat_period_end then comparing it to rat time 1 + rat time 2
 
 every bat landing happened, there was at least 1 rat present in the 30 min recording (in dataset1)
 
@@ -27,13 +27,27 @@ avg_food_availability, avg_bat_landing_number, avg_rat_arrival_number, sum_rat_m
 
 We realised that when habit is "rat" the risk is always 1 and 'pick' is always 0, 100% of the time, so the habit discribes the type of the risk/situation 
 
+(after removing outliers)
+DESCRIPTIVE STATISTICS for bat_landing_to_food by risk:
+  Group risk=0.0: n=404, Mean bat_landing_to_food=2.83
+  Group risk=1.0: n=411, Mean bat_landing_to_food=9.45
+
+(DIFFERENCE IN MEANS):
+
+P-value: 0.000000
+Statistical significance: highly significant (p < 0.001)
+Confidence level: 99.9%
+Interpretation: There is a statistically significant difference between the group means.
+
+
+
 
 
 ============================================================
 BAT LANDING TO FOOD TIME ANALYSIS FOR HABIT = 'RAT' OVER TIME (START_TIME)
 ============================================================
 Total 'rat' habit entries analyzed: 221
-Date range: 26/12/2017 21:24 to 20/05/2018 21:52
+Date range: 26/12/2017 21:24 to 20/05/2018 2  1:52
 
 DESCRIPTIVE STATISTICS:
 Mean bat landing time: 8.67 seconds
@@ -62,6 +76,313 @@ Vigilance: We can use the bat_landing_to_food variable to measure vigilance. A l
 
 
 seconds_after_rat_arrival vs avg_rat_arrival_number to see whether or not the rat take longer time to land if there are more rats
+
+
+
+per avg_rat_arrival_number level for boxplot of bat_landing_to_food:
+  avg_rat_arrival_number=1: n=505
+  avg_rat_arrival_number=2: n=232
+  avg_rat_arrival_number=3: n=87 
+
+
+
+????? In contrast, earlier results showed seconds_after_rat_arrival increases with rat activity (avoidance). Together: bats delay landing when rats are active (avoidance), but once they land, they approach the food at a similar speed regardless of how many rats are present (no added vigilance).
+
+
+
+
+we create a new column in the dataset called "motivation" based on food_availability/avg_rat_arrival_number=motevation.
+
+and another "decision time" based on seconds_after_rat_arrival+ bat_landing_to_food
+
+
+we will compare motivation to motivation and decision time when habit is related to RAT and risk = 1
+## group of all data without risk filter
+       decision time  motivation
+count     907.000000  907.000000
+mean      294.590752    1.848289
+std       243.258921    1.046256
+min         0.047647    0.000000
+25%       103.000000    0.971774
+50%       223.000000    1.809384
+75%       452.000000    3.000000
+max      1091.000000    4.000000
+
+#### Group: Risk (rat NOT present, risk = 0)
+      decision time  motivation
+count     458.000000  458.000000
+mean      284.722722    1.853877
+std       242.550112    1.062641
+min         1.000000    0.000000
+25%        93.250000    0.971774
+50%       209.000000    1.783578
+75%       436.500000    3.000000
+max      1091.000000    4.000000
+
+#### Group: Risk (rat present, risk = 1)
+
+       decision time  motivation
+count     449.000000  449.000000
+mean      304.656583    1.842590
+std       243.838376    1.030429
+min         0.047647    0.000000
+25%       106.000000    0.883204
+50%       226.000000    1.822307
+75%       473.000000    3.000000
+max       990.000000    4.000000
+
+
+
+Average bat_landing_to_food by motivation level (IQR on bat_landing_to_food only):
+  Motivation 0: n=83, avg bat_landing_to_food=3.63 seconds
+  Motivation 1: n=225, avg bat_landing_to_food=4.91 seconds
+  Motivation 2: n=233, avg bat_landing_to_food=8.21 seconds
+  Motivation 3: n=243, avg bat_landing_to_food=6.09 seconds
+  Motivation 4: n=38, avg bat_landing_to_food=1.96 seconds
+
+DESCRIPTIVE STATISTICS for bat_landing_to_food by avg_rat_arrival_number:
+  Group avg_rat_arrival_number=1: n=505
+  Group avg_rat_arrival_number=2: n=232
+  Group avg_rat_arrival_number=3: n=87
+
+ANOVA TEST (DIFFERENCE IN MEANS):
+F-statistic: 3.2873
+P-value: 0.037848
+Statistical significance: significant (p < 0.05)
+Confidence level: 95%
+Interpretation: There is a statistically significant difference in the means of at least two groups.
+
+
+
+DESCRIPTIVE STATISTICS for seconds_after_rat_arrival:
+Mean: 277.26 seconds
+Median: 203.00 seconds
+Mode: 22.00 seconds
+Standard deviation: 238.18 seconds
+Minimum: 0.00 seconds
+Maximum: 949.00 seconds
+
+TREND ANALYSIS (sum_rat_minutes vs seconds_after_rat_arrival):
+Trend slope: 12.702151  seconds per unit of sum_rat_minutes
+Standard error of slope: 1.066113
+Correlation coefficient (r): 0.3736
+R-squared (coefficient of determination): 0.1396
+P-value: 0.000000
+Statistical significance: highly significant (p < 0.001)
+Confidence level: 99.9%
+Trend interpretation: Moderate increasing relationship
+Effect size (R²): 14.0% of variance in seconds_after_rat_arrival explained by sum_rat_minutes
+Practical meaning: seconds_after_rat_arrival changes by 12.702 seconds per 1 unit increase in sum_rat_minutes
+
+
+
+Average bat landing vs motivation
+
+
+//most of the time when motivation is 0, the reward is also 0
+//THE NEWEST:
+Average bat_landing_to_food by motivation level (outliers removed via IQR):
+  Motivation 0: n=43, mean=4.06s, std=4.70, min=0.01, max=19.00
+  Motivation 1: n=105, mean=7.25s, std=8.28, min=0.01, max=38.00
+  Motivation 2: n=121, mean=13.00s, std=12.30, min=0.01, max=50.00
+  Motivation 3: n=126, mean=10.08s, std=9.29, min=0.02, max=39.00
+  Motivation 4: n=13, mean=5.46s, std=7.45, min=0.04, max=26.00
+----------------------------------------------------------------------------
+
+WHEN HAVING MOTIVATION 0 AND RISK IS 1, the bat tends to leave very fast, to confirm this we have to check if the reward is 0 when the motivation is 0, indicates bat leaving quickly
+
+--- REWARD ANALYSIS (Risk=1, Motivation ≈ 0) ---
+Total observations for this condition: 50
+  Reward = 0 (Not Rewarding): n=42 (84.0%)
+  Reward = 1 (Rewarding): n=8 (16.0%)
+
+
+  
+
+avg_rat_arrival_number vs avg_bat_landing_number
+
+
+
+rat_minutes vs food_availability
+
+rat_minutes vs avg_rat_arrival_number
+
+rat_minutes vs seconds_after_rat_arrival
+
+
+
+Created a motivation column in dataset2 based on (food_availability/ (rat_arrival_number+1))
+
+
+============================================================
+MOTIVATION AND RAT ARRIVAL DESCRIPTIVE STATISTICS:
+============================================================
+
+BAT LANDING STATISTICS:
+Mean bat landing number: 31.06
+Median bat landing number: 27.00
+Mode bat landing number: 2.00
+Standard deviation: 23.77
+Minimum number: 0.00
+Maximum number: 103.00
+
+MOTIVATION STATISTICS:
+Mean motivation: 2.10
+Median motivation: 2.00
+Mode motivation: 4.00
+Standard deviation: 1.31
+Minimum motivation: 0.00
+Maximum motivation: 4.00
+
+============================================================
+TREND ANALYSIS:
+============================================================
+Trend slope: 0.007233 motivation units per bat landing
+Standard error of slope: 0.001197
+Correlation coefficient (r): 0.1308
+R-squared (coefficient of determination): 0.0171
+P-value: 0.000000
+Statistical significance: highly significant (p < 0.001)
+Confidence level: 99.9%
+Trend interpretation: Weak increasing trend
+Effect size (R²): 1.7% of variance explained by bat landings
+Practical meaning: Motivation changes by 0.007233 units per additional bat landing
+
+
+
+
+hours_after_sunset vs food_availability
+
+================================================================================
+TREND ANALYSIS (Hours After Sunset vs Food Availability):
+Trend slope: -0.251554 units per hour
+Intercept: 3.770411 units
+Standard error of slope: 0.003505
+Correlation coefficient (r): -0.8416
+R-squared (coefficient of determination): 0.7083
+P-value: 0.000000
+Statistical significance: highly significant (p < 0.001)
+Confidence level: 99.9%
+Trend interpretation: Strong decreasing trend
+Effect size (R²): 70.8% of variance explained
+Practical meaning: Food availability decreases by 0.251554 units per hour after sunset
+
+
+
+
+bat bat_landing_number vs hours_after_sunset
+
+BAT LANDING ANALYSIS BY HOURS AFTER SUNSET:
+Total observations: 2123
+Hour groups analyzed: 32
+Hours range: -2.0 to 13.5
+Overall average bat landings: 32.08
+Overall median bat landings: 27.00
+Overall standard deviation: 25.61
+
+TOP 3 HOURS FOR BAT ACTIVITY:
+5.5 hours: 57.35 average landings (n=80)
+5.0 hours: 56.26 average landings (n=80)
+4.0 hours: 55.42 average landings (n=78)
+
+BOTTOM 3 HOURS FOR BAT ACTIVITY:
+13.0 hours: 2.84 average landings (n=31)
+13.5 hours: 3.29 average landings (n=17)
+12.5 hours: 4.13 average landings (n=30)
+
+
+We conclude that the bats are biased to landing between 2.5 hours after sunset and 7.5 hours., with 4-5.5 being the peak hours.
+we will take the hours between 2.5-7.5 hours after sunset to analyis the motivation
+
+
+
+================================================================================
+Analysis includes 32 hour groups with sufficient data.
+================================================================================
+BAT LANDING ANALYSIS BY HOURS AFTER SUNSET:
+Total observations: 2123
+Hour groups analyzed: 32
+Hours range: -2.0 to 13.5
+Overall average bat landings: 32.08
+Overall median bat landings: 27.00
+Overall standard deviation: 25.61
+
+TOP 3 HOURS FOR BAT ACTIVITY:
+5.5 hours: 57.35 average landings (n=80)
+5.0 hours: 56.26 average landings (n=80)
+4.0 hours: 55.42 average landings (n=78)
+
+BOTTOM 3 HOURS FOR BAT ACTIVITY:
+13.0 hours: 2.84 average landings (n=31)
+13.5 hours: 3.29 average landings (n=17)
+12.5 hours: 4.13 average landings (n=30)
+================================================================================
+BAR CHART VISUALIZATION:
+Average bat landing numbers by hour saved as:
+- bat_landing_by_hour_bar_chart.pdf
+- bat_landing_by_hour_bar_chart.png
+
+================================================================================
+MIDDLE 50% RECORDS ANALYSIS
+================================================================================
+Loading dataset for middle 50% extraction...
+Original dataset size: 2123 records
+Middle 50% dataset size: 1102 records
+Bat landing number range in middle 50%: 11.0 to 48.0
+Hours after sunset range in middle 50%: -2.0 to 12.5
+Motivation range in middle 50%: 0.00 to 4.00
+================================================================================
+MIDDLE 50% VISUALIZATION:
+Comprehensive visualization of middle 50% records saved as:
+- middle_50_percent_analysis.pdf
+- middle_50_percent_analysis.png
+
+KEY STATISTICS FOR MIDDLE 50% RECORDS:
+Number of records: 1102
+Bat landing range: 11 - 48
+Hours after sunset range: -2.0 - 12.5
+Motivation range: 0.00 - 4.00
+Average bat landings: 27.3
+Average hours after sunset: 4.7
+Average motivation: 2.18
+================================================================================
+MIDDLE 50% RECORDS - BAT LANDINGS vs MOTIVATION ANALYSIS:
+Motivation groups analyzed: 9
+Total records in analysis: 1102
+
+DETAILED ANALYSIS BY MOTIVATION LEVEL:
+Motivation 0.0: Avg=21.7, Count=66, Std=9.4, Range=11-46
+Motivation 0.5: Avg=24.4, Count=80, Std=10.0, Range=11-46
+Motivation 1.0: Avg=25.9, Count=206, Std=10.2, Range=11-48
+Motivation 1.5: Avg=27.2, Count=102, Std=10.1, Range=11-48
+Motivation 2.0: Avg=31.1, Count=161, Std=11.1, Range=11-48
+Motivation 2.5: Avg=34.6, Count=17, Std=8.4, Range=20-46
+Motivation 3.0: Avg=29.9, Count=228, Std=10.1, Range=11-48
+Motivation 3.5: Avg=28.1, Count=32, Std=11.4, Range=11-48
+Motivation 4.0: Avg=25.3, Count=210, Std=10.8, Range=11-48
+================================================================================
+
+
+******************************************************ACTIONS**************************************************
+- (order the first dataset based on start_time)    
+- (Unify the time stampscformat)
+- (we will take the records from dataset2 and connect them to the records in dataset1 based on the start time and the time of recording, if the durating (start time and rat_period_end) comes between 2 recordings, we will take the two records) start_time,bat_landing_to_food,habit,rat_period_start,rat_period_end,seconds_after_rat_arrival,risk,reward,month,sunset_time,hours_after_sunset,season,bat_landing_number,food_availability,rat_minutes,rat_arrival_number,bat_landing_number2,food_availability2,rat_minutes2,rat_arrival_number2
+- clean habits column, if it is all numbers, make it empty
+- average food_availability and food_availability2 => avg_food_availability
+- average of bat_landing_number and bat_landing_number2 => avg_bat_landing_number 
+- average rat rat_arrival_number and rat_arrival_number2 => avg_rat_arrival_number
+- sum of rat_minutes and rat_minutes2 => sum_rat_minutes
+- remove table 2 time and table 2 time 2 (it was only used to check the credebility of the merge)
+- over the time, where habit is "rat" compare the bat_landing_to_food
+- visualize data and calculate DESCRIPTIVE STATISTICS
+- compare motivation to motivation and decision time when habit is related to RAT and risk = 1
+
+
+
+
+
+
+==NOT IMPORTANT
 
 
 ===================================================================================================
@@ -98,6 +419,22 @@ Effect size (R²): 0.3% of variance explained
 
 
 
+
+
+sum_rat_minutes vs seconds_after_rat_arrival
+
+
+
+
+
+
+
+
+===============REDO:
+
+
+Check when risk is 0 and when risk is 1, because 
+
 rat_minutes vs bat_landing_to_food
 
 If bats perceived rats strongly as predators, you’d expect more hesitation (longer bat_landing_to_food) as rat activity increased.
@@ -122,49 +459,25 @@ Trend interpretation: Weak decreasing relationship between rat activity duration
 Effect size (R²): 0.0% of variance in bat landing time explained by rat minutes
 Practical meaning: Bat landing time changes by -0.009 seconds for each additional rat-minute
 
-sum_rat_minutes vs seconds_after_rat_arrival
-
-
-DESCRIPTIVE STATISTICS for seconds_after_rat_arrival:
-Mean: 277.26 seconds
-Median: 203.00 seconds
-Mode: 22.00 seconds
-Standard deviation: 238.18 seconds
-Minimum: 0.00 seconds
-Maximum: 949.00 seconds
-
-TREND ANALYSIS (sum_rat_minutes vs seconds_after_rat_arrival):
-Trend slope: 12.702151  seconds per unit of sum_rat_minutes
-Standard error of slope: 1.066113
-Correlation coefficient (r): 0.3736
-R-squared (coefficient of determination): 0.1396
-P-value: 0.000000
-Statistical significance: highly significant (p < 0.001)
-Confidence level: 99.9%
-Trend interpretation: Moderate increasing relationship
-Effect size (R²): 14.0% of variance in seconds_after_rat_arrival explained by sum_rat_minutes
-Practical meaning: seconds_after_rat_arrival changes by 12.702 seconds per 1 unit increase in sum_rat_minutes
-
-avg_rat_arrival_number vs avg_bat_landing_number
 
 
 
-rat_minutes vs food_availability
-
-rat_minutes vs avg_rat_arrival_number
-
-rat_minutes vs seconds_after_rat_arrival
 
 
-******************************************************ACTIONS**************************************************
-- (order the first dataset based on start_time)    
-- (Unify the time stampscformat)
-- (we will take the records from dataset2 and connect them to the records in dataset1 based on the start time and the time of recording, if the durating (start time and rat_period_end) comes between 2 recordings, we will take the two records) start_time,bat_landing_to_food,habit,rat_period_start,rat_period_end,seconds_after_rat_arrival,risk,reward,month,sunset_time,hours_after_sunset,season,bat_landing_number,food_availability,rat_minutes,rat_arrival_number,bat_landing_number2,food_availability2,rat_minutes2,rat_arrival_number2
-- clean habits column, if it is all numbers, make it empty
-- average food_availability and food_availability2 => avg_food_availability
-- average of bat_landing_number and bat_landing_number2 => avg_bat_landing_number 
-- average rat rat_arrival_number and rat_arrival_number2 => avg_rat_arrival_number
-- sum of rat_minutes and rat_minutes2 => sum_rat_minutes
-- remove table 2 time and table 2 time 2 (it was only used to check the credebility of the merge)
-- over the time, where habit is "rat" compare the bat_landing_to_food
-- visualize data and calculate DESCRIPTIVE STATISTICS
+
+
+Average bat_landing_to_food by motivation level (outliers removed via IQR):
+  Motivation 0: n=43, mean=4.06s, std=4.70, min=0.01, max=19.00
+  Motivation 1: n=105, mean=7.25s, std=8.28, min=0.01, max=38.00
+  Motivation 2: n=121, mean=13.00s, std=12.30, min=0.01, max=50.00
+  Motivation 3: n=126, mean=10.08s, std=9.29, min=0.02, max=39.00
+  Motivation 4: n=13, mean=5.46s, std=7.45, min=0.04, max=26.00
+----------------------------------------------------------------------------
+
+Average bat_landing_to_food by motivation level (outliers removed via IQR):
+  Motivation 0: n=40, mean=3.19s, std=3.09, min=0.04, max=13.00
+  Motivation 1: n=118, mean=3.20s, std=3.20, min=0.02, max=13.00
+  Motivation 2: n=102, mean=2.44s, std=2.40, min=0.01, max=11.00
+  Motivation 3: n=116, mean=2.85s, std=2.35, min=0.01, max=10.00
+  Motivation 4: n=25, mean=1.26s, std=1.46, min=0.02, max=5.00
+-------------------------------------------------------------------------------

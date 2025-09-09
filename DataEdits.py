@@ -215,6 +215,26 @@ def create_aggregated_columns():
         
         # Create sum of rat_minutes
         df['sum_rat_minutes'] = df[['rat_minutes', 'rat_minutes2']].sum(axis=1, skipna=True)
+
+        # Ensure numeric types for calculations below
+        for c in ['food_availability', 'avg_rat_arrival_number', 'seconds_after_rat_arrival', 'bat_landing_to_food']:
+            if c in df.columns:
+                df[c] = pd.to_numeric(df[c], errors='coerce')
+
+        # Create custom columns requested by user
+        # 1) food_availability / avg_rat_arrival_number => motevation
+        if 'food_availability' in df.columns and 'avg_rat_arrival_number' in df.columns:
+            df['motevation'] = df['food_availability'] / df['avg_rat_arrival_number']
+            # Avoid inf when dividing by zero
+            df['motevation'].replace([float('inf'), -float('inf')], pd.NA, inplace=True)
+        else:
+            df['motevation'] = pd.NA
+
+        # 2) seconds_after_rat_arrival + bat_landing_to_food => decision time
+        if 'seconds_after_rat_arrival' in df.columns and 'bat_landing_to_food' in df.columns:
+            df['decision time'] = df['seconds_after_rat_arrival'] + df['bat_landing_to_food']
+        else:
+            df['decision time'] = pd.NA
         
         # Remove table_2_time columns
         columns_to_remove = ['table_2_time', 'table_2_time_2']
@@ -231,6 +251,8 @@ def create_aggregated_columns():
         print("- avg_bat_landing_number") 
         print("- avg_rat_arrival_number")
         print("- sum_rat_minutes")
+        print("- motevation  (food_availability / avg_rat_arrival_number)")
+        print("- decision time (seconds_after_rat_arrival + bat_landing_to_food)")
         print("\nRemoved columns:")
         print("- table_2_time")
         print("- table_2_time_2")
@@ -261,6 +283,8 @@ def reorder_columns():
             'avg_rat_arrival_number',
             'avg_bat_landing_number',
             'avg_food_availability',
+            'motevation',
+            'decision time',
             'risk',
             'reward',
 
@@ -359,7 +383,7 @@ if __name__ == "__main__":
     # clean_habit_column()
     
     # Create aggregated columns
-    # create_aggregated_columns()
-    reorder_columns()
+    # reorder_columns()
     # Preview results
     # preview_merge_results()
+    create_aggregated_columns() #food_availability/avg_rat_arrival_number=motevation ,seconds_after_rat_arrival+ bat_landing_to_food= decision time
