@@ -1,4 +1,4 @@
-The null hypothesis is that rat presence has no effect on bat avoidance or vigilance.
+  The null hypothesis is that rat presence has no effect on bat avoidance or vigilance.
 
 seconds_after_rat_arrival is the difference between rat_start_time and start_time, from dataset1 we observed that rats are usually on the platform first.
 Risk-reward analysis, see wether taking the risk was rewarding to the bats or not
