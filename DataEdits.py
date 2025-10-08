@@ -265,6 +265,40 @@ def create_aggregated_columns():
         print("Merged dataset not found. Run join_datasets() first.")
         return None
 
+def add_rat_encounter_column():
+    """
+    Add rat_encounter column based on rat_arrival_number * bat_landing_number
+    """
+    try:
+        df = pd.read_csv('dataset1_merged.csv')
+        print("Dataset loaded successfully")
+        
+        # Add the rat_encounter column
+        df['rat_encounter'] = df['rat_arrival_number'] * df['bat_landing_number']
+        
+        # Save the updated dataset
+        df.to_csv('dataset1_merged.csv', index=False)
+        print("rat_encounter column added successfully")
+        print(f"Updated dataset saved as 'dataset1_merged.csv'")
+        
+        # Show statistics for the new column
+        print(f"\nRat Encounter Statistics:")
+        print(f"Mean: {df['rat_encounter'].mean():.2f}")
+        print(f"Median: {df['rat_encounter'].median():.2f}")
+        print(f"Min: {df['rat_encounter'].min():.2f}")
+        print(f"Max: {df['rat_encounter'].max():.2f}")
+        print(f"Standard Deviation: {df['rat_encounter'].std():.2f}")
+        
+        # Show sample values
+        print(f"\nSample of rat_encounter values:")
+        print(df[['rat_arrival_number', 'bat_landing_number', 'rat_encounter']].head(10))
+        
+        return df
+        
+    except FileNotFoundError:
+        print("Merged dataset not found. Run previous steps first.")
+        return None
+
 def reorder_columns():
     """
     Reorder columns based on logical groupings, keeping month and season at the end
@@ -283,6 +317,7 @@ def reorder_columns():
             'avg_rat_arrival_number',
             'avg_bat_landing_number',
             'avg_food_availability',
+            'rat_encounter',
             'motevation',
             'decision time',
             'risk',
@@ -354,6 +389,7 @@ def preview_merge_results():
         
     except FileNotFoundError:
         print("Merged dataset not found. Run join_datasets() first.")
+
 def get_unique_habit_values(csv_path):
     """
     Returns a list of all unique values in the 'habit' column.

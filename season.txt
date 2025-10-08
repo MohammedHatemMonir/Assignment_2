@@ -1,0 +1,6 @@
+0 = Summer (December, January, February)
+1 = Autumn (March, April, May)
+2 = Winter (June, July, August)
+3 = Spring (September, October, November)
+4 = Summer (December, January, February)
+5 = Autumn (March, April, May)
