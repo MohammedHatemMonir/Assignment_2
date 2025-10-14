@@ -164,12 +164,8 @@ def visualize_seasons_vs_rat_encounter():
 
     # Create season labels based on Australian seasons
     season_labels = {
-        0: 'Summer',
-        1: 'Autumn', 
-        2: 'Winter',
-        3: 'Spring',
-        4: 'Summer',
-        5: 'Autumn'
+        0: '',
+        1: '', 
     }
 
     # Map season numbers to labels
